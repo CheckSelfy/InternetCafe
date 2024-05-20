@@ -8,4 +8,3 @@ file(GLOB_RECURSE source RELATIVE ${CMAKE_SOURCE_DIR} "src/*.cpp")
 add_executable(internet_cafe ${source})
 
 file(COPY resources DESTINATION ${CMAKE_BINARY_DIR})
-file(COPY test.py DESTINATION ${CMAKE_BINARY_DIR})
