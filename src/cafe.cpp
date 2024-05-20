@@ -50,9 +50,12 @@ void cafe::client_seat(const time_unit &time, const std::string &client_name, un
 }
 
 void cafe::kick_visitors() {
-    for (auto &[name, client]: clients) {
-        client_gone(end, name, true);
+    while (!clients.empty()) {
+        client_gone(end, clients.begin()->first, true);
     }
+//    for (auto &[name, client]: clients) {
+//        client_gone(end, name, true);
+//    }
 }
 
 void cafe::client_gone(const time_unit &time, const std::string &client_name) {
