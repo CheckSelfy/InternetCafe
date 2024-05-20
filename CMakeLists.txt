@@ -4,7 +4,8 @@ project(InternetCafe)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(InternetCafe src/main.cpp)
+file(GLOB_RECURSE source RELATIVE ${CMAKE_SOURCE_DIR} "src/*.cpp")
+add_executable(InternetCafe ${source})
 
 include(FetchContent)
 FetchContent_Declare(

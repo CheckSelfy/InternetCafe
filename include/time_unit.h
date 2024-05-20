@@ -12,18 +12,11 @@ public:
 
     void setMinutes(unsigned hour, unsigned minutes);
 
-    unsigned operator-(time_unit const & other) const {
-        if (other.minutes > this->minutes) {
-            return other - *this;
-        }
+    unsigned operator-(time_unit const & other) const;
 
-        return this->minutes - other.minutes;
-    }
+    auto operator<=>(time_unit const & rhs) const = default;
 
-    time_unit& operator+= (unsigned delta) {
-        minutes += delta;
-        return *this;
-    }
+    time_unit& operator+= (unsigned delta);
 
     friend std::istream &operator>>(std::istream &is, time_unit &t);
 

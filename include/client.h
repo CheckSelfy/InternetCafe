@@ -1,16 +1,13 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 #include "time_unit.h"
 #include "table.h"
 #include "session.h"
 
 class client {
 public:
-    // CLIENT LIFE:
-    // ctor -> INSIDE -> WAITING -> DESTRUCTION (не дождался)
-    // ctor -> INSIDE -> WAITING -> PLAYING -> DESTRUCTION (поиграл)
-    // ctor -> INSIDE -> PLAYING -> DESTRUCTION (сразу сел за стол)
     enum class client_state {
         /* OUTSIDE is state before construction */
         INSIDE,
@@ -20,19 +17,22 @@ public:
     };
 
 private:
+    const std::string name;
     client_state state;
-    std::unique_ptr<session> session;
+    std::unique_ptr<session> sess;
 
 public:
-    explicit client() : state(client_state::INSIDE), session(nullptr) {
-    }
+    explicit client(std::string name);
 
-    void wait() {
-        this->state = client_state::WAITING;
-    }
+    void wait();
 
-    void seat(table * table, time_unit const& start_time) {
-    }
+    void seat(table * table, time_unit const& time);
 
+    table* unseat(time_unit const& time);
 
+    [[nodiscard]] std::string const & get_name() const;
+
+    [[nodiscard]] bool is_playing() const;
+
+    [[nodiscard]] bool is_waiting() const;
 };

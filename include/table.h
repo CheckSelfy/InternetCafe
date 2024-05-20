@@ -19,4 +19,9 @@ public:
     void seat();
 
     void unseat(unsigned amount);
+
+    [[nodiscard]] unsigned get_money_hours() const;
+
+    time_unit get_used_time() const;
+
 };
