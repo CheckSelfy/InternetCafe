@@ -5,21 +5,32 @@
 #include "../include/cafe.h"
 
 namespace {
-    unsigned parse_table_count(std::string const &line) {
-        return std::stoul(line);
+    unsigned parse_table_count(std::ifstream& fin, unsigned & number_line) {
+        std::string line;
+        std::getline(fin, line);
+        unsigned result = std::stoul(line);
+        number_line++;
+        return result;
     }
 
-    std::pair<time_unit, time_unit> parse_work_time(std::string const &line) {
+    std::pair<time_unit, time_unit> parse_work_time(std::ifstream &fin, unsigned &number_line) {
+        std::string line;
+        std::getline(fin, line);
         std::istringstream input(line);
 
         time_unit s1 = time_unit();
         time_unit s2 = time_unit();
         input >> s1 >> s2;
+        number_line++;
         return std::make_pair(s1, s2);
     }
 
-    unsigned parse_price(std::string const &line) {
-        return std::stoul(line);
+    unsigned parse_price(std::ifstream &fin, unsigned & number_line) {
+        std::string line;
+        std::getline(fin, line);
+        unsigned result = std::stoul(line);
+        number_line++;
+        return result;
     }
 
     enum class event_type {
@@ -37,8 +48,7 @@ namespace {
     }
 }
 
-
-int main(int argc, char **argv) {
+int run(int argc, char **argv) {
     if (argc != 2) {
         std::cout << "Expected 2 arguments, found " << argc << "\nUsage: " << argv[0] << " <test_file>" << std::endl;
         return EXIT_FAILURE;
@@ -53,20 +63,12 @@ int main(int argc, char **argv) {
     unsigned event_number = 0;
     std::string line;
     try {
-        // TODO COMMON CODE
-        std::getline(file, line);
-        event_number++;
-        auto table_count = parse_table_count(line);
-        std::getline(file, line);
-        event_number++;
-        auto [start, end] = parse_work_time(line);
-        std::getline(file, line);
-        event_number++;
-        auto price = parse_price(line);
+        auto table_count = parse_table_count(file, event_number);
+        auto [start, end] = parse_work_time(file, event_number);
+        auto price = parse_price(file, event_number);
 
         std::cout << start << std::endl;
 
-        event_number = 4;
         cafe cafe_instance = cafe(table_count, start, end, price, std::cout);
         while (std::getline(file, line)) {
             std::istringstream stream = std::istringstream(line);
@@ -108,4 +110,10 @@ int main(int argc, char **argv) {
     } catch (...) {
         throw;
     }
+
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    return run(argc, argv); // for testing
 }
